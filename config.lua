@@ -2,7 +2,7 @@ Config = {
     EnableSkillCheck = true,
     ImageBasePath = "nui://qb-inventory/html/images/",
     item_bench = {
-        object = `prop_tool_bench02`,
+        object = `prop_tool_bench02_ld`,
         xpType = 'craftingrep',
         recipes = {
             {

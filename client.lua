@@ -178,12 +178,12 @@ RegisterNetEvent('qb-crafting:client:useCraftingTable', function(benchType)
     local coordsP = GetOffsetFromEntityInWorldCoords(playerPed, 0.0, 1.0, 1.0)
     local playerHeading = GetEntityHeading(PlayerPedId())
     local itemHeading = playerHeading - 90
-    local workbench = CreateObject(Config[benchType].object, coordsP, true, true, true)
+    local workbench = CreateObject(Config[benchType].object, coordsP.x, coordsP.y, coordsP.z, true, true, true)
     if itemHeading < 0 then itemHeading = 360 + itemHeading end
     SetEntityHeading(workbench, itemHeading)
     PlaceObjectOnGroundProperly(workbench)
     TriggerServerEvent('qb-crafting:server:removeCraftingTable', benchType)
-    exports['qb-target']:AddTargetEntity(Config[benchType].object, {
+    exports['qb-target']:AddTargetModel(Config[benchType].object, {
         options = {
             {
                 icon = 'fas fa-tools',
@@ -203,4 +203,20 @@ RegisterNetEvent('qb-crafting:client:useCraftingTable', function(benchType)
         },
         distance = 2.5
     })
+end)
+
+-- 
+RegisterNetEvent('qb-crafting:client:receiveItem', function(craftedItem, requiredItems, amountToCraft, xpEarned, xpType)
+    QBCore.Functions.Progressbar(craftedItem, "Trabalhando", 4000, false, true, {
+        disableMovement = true,
+        disableCarMovement = true,
+        disableMouse = false,
+        disableCombat = true,
+    }, {
+        animDict = 'mini@repair',
+        anim = 'fixing_a_player',
+        flags = 16,
+    }, {}, {}, function() -- Done
+        TriggerServerEvent('qb-crafting:server:receiveItem', craftedItem, requiredItems, amountToCraft, xpEarned, xpType)
+    end)
 end)
